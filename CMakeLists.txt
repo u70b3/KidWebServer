@@ -3,6 +3,13 @@ project(ToyWebServer)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(server server.cpp error_handling.cpp)
-add_executable(client client.cpp error_handling.cpp)
+add_executable(server
+    src/server.cpp
+    src/error_handling.cpp
+    )
+
+add_executable(client
+    src/client.cpp 
+    src/error_handling.cpp
+    )
 
