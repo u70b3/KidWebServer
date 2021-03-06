@@ -43,7 +43,7 @@
 				}
 			],
 			"type" : "STRING",
-			"value" : "Release"
+			"value" : "Debug"
 		},
 		{
 			"name" : "CMAKE_CACHEFILE_DIR",
@@ -1122,30 +1122,6 @@
 			"value" : "FALSE"
 		},
 		{
-			"name" : "TinyWebServer_BINARY_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/workspaces/ToyWebServer/build"
-		},
-		{
-			"name" : "TinyWebServer_SOURCE_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/workspaces/ToyWebServer"
-		},
-		{
 			"name" : "ToyWebServer_BINARY_DIR",
 			"properties" : 
 			[
@@ -1159,30 +1135,6 @@
 		},
 		{
 			"name" : "ToyWebServer_SOURCE_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/workspaces/ToyWebServer"
-		},
-		{
-			"name" : "echo_epoll_ET_BINARY_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/workspaces/ToyWebServer/build"
-		},
-		{
-			"name" : "echo_epoll_ET_SOURCE_DIR",
 			"properties" : 
 			[
 				{

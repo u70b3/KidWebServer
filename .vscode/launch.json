@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) debug",
+            "name": "ToyWebServer调试",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/server",
