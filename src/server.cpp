@@ -45,10 +45,7 @@ int main(int argc, char *argv[])
     }
 
     auto epoller = new Epoller(EPOLL_SIZE);
-
-    int epfd = epoll_create(EPOLL_SIZE);
-    epoll_event *ep_events = (epoll_event *)malloc(sizeof(epoll_event) * EPOLL_SIZE);
-
+    
     epoller->AddFd(server_sock, EPOLLIN);
 
     while (1)
@@ -91,14 +88,13 @@ int main(int argc, char *argv[])
                     }
                     else
                     {
-                        write(event_fd, buf, str_len);
+                        auto _ = write(event_fd, buf, str_len);
                     }
                 }
             }
         }
     }
     close(server_sock);
-    close(epfd);
     delete epoller;
 
     return 0;
