@@ -10,8 +10,8 @@
 
 #include "Epoller.h"
 
-const int BUF_SIZE = 4;
-const int EPOLL_SIZE = 1024;
+const int BUF_SIZE = 1024;
+const int EPOLL_SIZE = 16;
 
 void setnonblockingmode(int fd);
 void error_handling(const char *buf);
@@ -88,7 +88,8 @@ int main(int argc, char *argv[])
                     }
                     else
                     {
-                        auto _ = write(event_fd, buf, str_len);
+                        const char* buf = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n<html><head></head><body><!--body goes here--></body></html>";
+                        auto _ = write(event_fd, buf, 1024);
                     }
                 }
             }
