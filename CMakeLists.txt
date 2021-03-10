@@ -7,11 +7,12 @@ set(CMAKE_INCLUDE_CURRENT_DIR on)
 
 add_executable(server
     src/Epoller.cpp
-    src/Server.cpp
+    src/Buffer.cpp
     src/ErrorHandling.cpp
+    src/main.cpp
     )
 
 add_executable(client
-    src/Client.cpp 
+    test/test.cpp 
     src/ErrorHandling.cpp
     )
