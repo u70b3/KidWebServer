@@ -8,7 +8,7 @@
             "name": "ToyWebServer调试",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/server",
+            "program": "${workspaceFolder}/build/ToyWebServer",
             "args": ["65535"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
