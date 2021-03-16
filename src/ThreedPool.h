@@ -8,7 +8,6 @@
 #include <thread>
 #include <functional>
 
-
 class ThreadPool
 {
 public:

@@ -5,17 +5,27 @@ project(ToyWebServer)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_INCLUDE_CURRENT_DIR on)
 
+# 编译 ./src/ 下所有文件
+aux_source_directory(./src/ SRC_MAIN)
 
-add_executable(${PROJECT_NAME}
-    src/Epoller.cpp
-    src/Buffer.cpp
-    src/ErrorHandling.cpp
-    src/main.cpp
+# 编译 ./test/ 下所有文件
+aux_source_directory(./test/ TEST_MAIN)
+
+# src 目录生成 ToyWebServer 可执行文件
+add_executable(
+    ${PROJECT_NAME}
+    ${SRC_MAIN}
     )
 
-add_executable(client
-    test/test.cpp 
-    src/ErrorHandling.cpp
+target_link_libraries(
+    ${PROJECT_NAME}
+    PRIVATE 
+    pthread
     )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE pthread)
+
+# test 目录生成 client 可执行文件
+add_executable(
+    TestClient
+    ${TEST_MAIN}
+    )

@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "*.tcc": "cpp",
-        "functional": "cpp"
+        "functional": "cpp",
+        "thread": "cpp",
+        "condition_variable": "cpp",
+        "mutex": "cpp",
+        "cassert": "cpp"
     }
 }

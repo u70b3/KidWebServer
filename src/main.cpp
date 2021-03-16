@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     }
 
     auto epoller = new Epoller(EPOLL_SIZE);
-    
+
     epoller->AddFd(server_sock, EPOLLIN);
 
     while (1)
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
             {
                 socklen_t addr_size = sizeof(client_addr);
                 int client_sock = accept(server_sock, (sockaddr *)&client_addr, &addr_size);
-                setnonblockingmode(client_sock);  // 设置client socket为非阻塞模式
+                setnonblockingmode(client_sock); // 设置client socket为非阻塞模式
                 epoller->AddFd(client_sock, EPOLLIN | EPOLLET);
                 printf("connect client: %d\n", client_sock);
             }
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
                     }
                     else
                     {
-                        const char* buf = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n<html><head></head><body><!--body goes here--></body></html>";
+                        const char *buf = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\n\r\n<html><head></head><body><!--body goes here--></body></html>";
                         auto _ = write(event_fd, buf, 1024);
                     }
                 }
