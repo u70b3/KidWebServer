@@ -19,9 +19,9 @@ void error_handling(const char *buf);
 
 int main(int argc, char *argv[])
 {
-    Log::Instance()->init(0, "../log", ".log", 16);
-    LOG_ERROR("========== Server start init ==========");
-    
+    Log::Instance()->init(0, "./log", ".log", 16);
+    LOG_INFO("========== Server start init ==========");
+
     sockaddr_in server_addr, client_addr;
     char buf[BUF_SIZE];
 
