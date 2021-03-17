@@ -1,2 +1,10 @@
-2021-03-17 02:57:13.951005 [info] : ========== Server start init ==========
-2021-03-17 02:57:13.952008 [info] : ========== Server listening on 65535 ==========
+2021-03-17 11:42:13.607042 [info] : ========== Server init ==========
+2021-03-17 11:42:13.607094 [info] : Port:65535, OpenLinger: false
+2021-03-17 11:42:13.607101 [info] : Listen Mode: ET, OpenConn Mode: ET
+2021-03-17 11:42:13.607105 [info] : LogSys level: 1
+2021-03-17 11:42:13.607110 [info] : srcDir: /workspaces/ToyWebServer/root/
+2021-03-17 11:42:13.607115 [info] : ThreadPool num: 6
+2021-03-17 11:42:13.607121 [info] : ========== Server start ==========
+2021-03-17 11:42:24.972286 [info] : Client[6](127.0.0.1:48831) in, userCount:1
+2021-03-17 11:42:24.973335 [info] : Client[6] in!
+2021-03-17 11:42:27.856769 [info] : Client[7](127.0.0.1:49855) in, userCount:2

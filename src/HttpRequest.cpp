@@ -10,6 +10,7 @@ const unordered_set<string> HttpRequest::DEFAULT_HTML{
     "/welcome",
     "/video",
     "/picture",
+    "/404",
 };
 
 const unordered_map<string, int> HttpRequest::DEFAULT_HTML_TAG{

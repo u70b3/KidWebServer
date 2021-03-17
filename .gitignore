@@ -1,3 +1,5 @@
+# project
+log/*.log
 
 # General
 .DS_Store
