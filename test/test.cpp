@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     while (1)
     {
         printf("Input message( Q to quit ): ");
-        fgets(message, BUF_SIZE, stdin);
+        auto _ = fgets(message, BUF_SIZE, stdin);
 
         // 如果输入q或者Q，则退出
         if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
