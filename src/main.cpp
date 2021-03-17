@@ -10,12 +10,10 @@
 
 #include "Epoller.h"
 #include "Log.h"
+#include "Util.h"
 
 const int BUF_SIZE = 1024;
 const int EPOLL_SIZE = 16;
-
-void setnonblockingmode(int fd);
-void error_handling(const char *buf);
 
 int main(int argc, char *argv[])
 {
@@ -105,11 +103,4 @@ int main(int argc, char *argv[])
     delete epoller;
 
     return 0;
-}
-
-// 将文件描述符设置为非阻塞
-void setnonblockingmode(int fd)
-{
-    int flag = fcntl(fd, F_GETFL, 0);
-    fcntl(fd, F_SETFL, flag | O_NONBLOCK);
 }

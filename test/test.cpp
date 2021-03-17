@@ -7,7 +7,11 @@
 
 const int BUF_SIZE = 1024;
 
-void error_handling(const char *message);
+void error_handling(const char *message)
+{
+    printf("%s", message);
+    exit(1);
+}
 
 // 接收两个参数，argv[1]为IP地址，argv[2]为端口号
 int main(int argc, char *argv[])
