@@ -1,5 +1,5 @@
 #ifndef __THREADPOOL_H_
-#define __THREADPOOL_H
+#define __THREADPOOL_H_
 
 #include <cassert>
 #include <mutex>

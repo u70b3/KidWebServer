@@ -5,6 +5,7 @@
         "thread": "cpp",
         "condition_variable": "cpp",
         "mutex": "cpp",
-        "cassert": "cpp"
+        "cassert": "cpp",
+        "unordered_map": "cpp"
     }
 }

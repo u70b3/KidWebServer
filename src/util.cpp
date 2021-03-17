@@ -3,7 +3,7 @@
 #include <fcntl.h>
 
 #include "Log.h"
-#include "Util.h"
+#include "util.h"
 
 void error_handling(const char *message)
 {
