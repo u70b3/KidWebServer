@@ -19,7 +19,7 @@ void error_handling(const char *buf);
 
 int main(int argc, char *argv[])
 {
-    Log::Instance()->init(0, "./log", ".log", 16);
+    Log::Instance()->init(0, "./log", ".log", 0);
     LOG_INFO("========== Server start init ==========");
 
     sockaddr_in server_addr, client_addr;
@@ -48,6 +48,8 @@ int main(int argc, char *argv[])
         error_handling("listen() error");
     }
 
+    LOG_INFO("========== Server listening on %d ==========", server_addr.sin_port);
+
     auto epoller = new Epoller(EPOLL_SIZE);
 
     epoller->AddFd(server_sock, EPOLLIN);
@@ -57,7 +59,7 @@ int main(int argc, char *argv[])
         auto event_cnt = epoller->Wait();
         if (event_cnt == -1)
         {
-            puts("epoll_wait() error");
+            LOG_ERROR("epoll_wait() error");
             break;
         }
 
@@ -70,7 +72,7 @@ int main(int argc, char *argv[])
                 int client_sock = accept(server_sock, (sockaddr *)&client_addr, &addr_size);
                 setnonblockingmode(client_sock); // 设置client socket为非阻塞模式
                 epoller->AddFd(client_sock, EPOLLIN | EPOLLET);
-                printf("connect client: %d\n", client_sock);
+                LOG_INFO("connect client: %d\n", client_sock);
             }
             else
             {
@@ -81,7 +83,7 @@ int main(int argc, char *argv[])
                     {
                         epoller->DeleteFd(event_fd);
                         close(event_fd);
-                        printf("closed client: %d\n", event_fd);
+                        LOG_INFO("closed client: %d\n", event_fd);
                     }
                     else if (str_len < 0)
                     {
