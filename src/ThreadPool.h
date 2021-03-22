@@ -1,5 +1,5 @@
-#ifndef __THREADPOOL_H_
-#define __THREADPOOL_H_
+#ifndef __THREAD_POOL_H_
+#define __THREAD_POOL_H_
 
 #include <cassert>
 #include <mutex>
@@ -11,7 +11,7 @@
 class ThreadPool
 {
 public:
-    explicit ThreadPool(size_t threadCount = 8) : pool_(std::make_shared<Pool>())
+    explicit ThreadPool(size_t threadCount) : pool_(std::make_shared<Pool>())
     {
         assert(threadCount > 0);
         for (size_t i = 0; i < threadCount; i++)
@@ -37,7 +37,10 @@ public:
         }
     }
 
-    ThreadPool() = default;
+    ThreadPool() : ThreadPool(std::thread::hardware_concurrency())
+    {
+        ;
+    }
 
     ThreadPool(ThreadPool &&) = default;
 
@@ -74,4 +77,4 @@ private:
     std::shared_ptr<Pool> pool_;
 };
 
-#endif //__THREADPOOL_H_
+#endif //__THREAD_POOL_H_

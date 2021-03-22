@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 
 project(ToyWebServer)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_INCLUDE_CURRENT_DIR on)
 
 # 编译 ./src/ 下所有文件
@@ -24,7 +24,7 @@ target_link_libraries(
 
 
 # test 目录生成 TestClient 可执行文件
-add_executable(
-    TestClient
-    ${TEST_MAIN}
-    )
+# add_executable(
+#     TestClient
+#     ${TEST_MAIN}
+#     )
