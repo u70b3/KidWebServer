@@ -69,7 +69,7 @@ void HttpResponse::Init(const string &srcDir, string &path, bool isKeepAlive, in
 void HttpResponse::MakeResponse(Buffer &buff)
 {
     /* 判断请求的资源文件 */
-    if (stat((srcDir_ + path_).data(), &mmFileStat_) < 0 || S_ISDIR(mmFileStat_.st_mode))
+    if (stat((srcDir_ + path_).c_str(), &mmFileStat_) < 0 || S_ISDIR(mmFileStat_.st_mode))
     {
         code_ = 404;
     }
@@ -102,7 +102,7 @@ void HttpResponse::ErrorHtml_()
     if (CODE_PATH.count(code_) == 1)
     {
         path_ = CODE_PATH.find(code_)->second;
-        stat((srcDir_ + path_).data(), &mmFileStat_);
+        stat((srcDir_ + path_).c_str(), &mmFileStat_);
     }
 }
 
@@ -138,7 +138,7 @@ void HttpResponse::AddHeader_(Buffer &buff)
 
 void HttpResponse::AddContent_(Buffer &buff)
 {
-    int srcFd = open((srcDir_ + path_).data(), O_RDONLY);
+    int srcFd = open((srcDir_ + path_).c_str(), O_RDONLY);
     if (srcFd < 0)
     {
         ErrorContent(buff, "File NotFound!");
@@ -147,7 +147,7 @@ void HttpResponse::AddContent_(Buffer &buff)
 
     /* 将文件映射到内存提高文件的访问速度 
         MAP_PRIVATE 建立一个写入时拷贝的私有映射*/
-    LOG_DEBUG("file path %s", (srcDir_ + path_).data());
+    LOG_DEBUG("file path %s", (srcDir_ + path_).c_str());
     int *mmRet = (int *)mmap(0, mmFileStat_.st_size, PROT_READ, MAP_PRIVATE, srcFd, 0);
     if (*mmRet == -1)
     {

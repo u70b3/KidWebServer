@@ -64,7 +64,7 @@ void Buffer::HasWritten(size_t len)
 
 void Buffer::Append(const std::string &str)
 {
-    Append(str.data(), str.length());
+    Append(str.c_str(), str.length());
 }
 
 void Buffer::Append(const void *data, size_t len)
