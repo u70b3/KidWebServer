@@ -1,5 +1,8 @@
 # project
 *.log
+!.gitkeep
+pid
+
 
 # General
 .DS_Store

@@ -10,7 +10,7 @@ vscode + docker开箱即用，无需其他依赖
 ## 介绍
 - 解析HTTP请求
 - 定时器处理非活跃连接
-- Proactor编程模型，基于epoll的IO多路复用
+- Reactor编程模型，基于Epoll的IO多路复用
 - 多线程利用多核能力，线程池减轻资源开销
 
 ## todo

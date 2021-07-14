@@ -1,5 +1,4 @@
-#ifndef __BLOCKING_QUEUE_H_
-#define __BLOCKING_QUEUE_H_
+#pragma once
 
 #include <mutex>
 #include <deque>
@@ -196,5 +195,3 @@ bool BlockingQueue<T>::pop(T &item, int timeout)
     condProducer_.notify_one();
     return true;
 }
-
-#endif // __BLOCKING_QUEUE_H_

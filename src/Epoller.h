@@ -1,5 +1,5 @@
-#ifndef __EPOLLER_H_
-#define __EPOLLER_H_
+#pragma once
+
 
 #include <sys/epoll.h> //epoll_ctl()
 #include <fcntl.h>     // fcntl()
@@ -32,5 +32,3 @@ private:
 
     std::vector<struct epoll_event> events_;
 };
-
-#endif //__EPOLLER_H_

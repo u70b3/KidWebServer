@@ -1,5 +1,5 @@
-#ifndef __WEB_SERVER_H_
-#define __WEB_SERVER_H_
+#pragma once
+
 
 #include <unordered_map>
 #include <fcntl.h>  // fcntl()
@@ -63,5 +63,3 @@ private:
     std::unique_ptr<Epoller> epoller_;
     std::unordered_map<int, HttpConnection> users_;
 };
-
-#endif //__WEB_SERVER_H_

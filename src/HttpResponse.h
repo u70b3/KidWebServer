@@ -1,5 +1,4 @@
-#ifndef __HTTP_RESPONSE_H_
-#define __HTTP_RESPONSE_H_
+#pragma once
 
 #include <unordered_map>
 #include <fcntl.h>    // open
@@ -46,4 +45,3 @@ private:
     static const std::unordered_map<int, std::string> CODE_PATH;
 };
 
-#endif //__HTTP_RESPONSE_H_

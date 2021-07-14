@@ -1,5 +1,4 @@
-#ifndef __HTTP_REQUEST_H_
-#define __HTTP_REQUEST_H_
+#pragma once
 
 #include <unordered_map>
 #include <unordered_set>
@@ -67,4 +66,3 @@ private:
     static int ConverHex(char ch);
 };
 
-#endif //__HTTP_REQUEST_H_

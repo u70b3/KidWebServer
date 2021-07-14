@@ -24,7 +24,7 @@ target_link_libraries(
 
 
 # test 目录生成 TestClient 可执行文件
-# add_executable(
-#     TestClient
-#     ${TEST_MAIN}
-#     )
+add_executable(
+    TestClient
+    ${TEST_MAIN}
+    )

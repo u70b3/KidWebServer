@@ -1,5 +1,4 @@
-#ifndef __HTTP_CONNECTION_H_
-#define __HTTP_CONNECTION_H_
+#pragma once
 
 #include <sys/types.h>
 #include <sys/uio.h>   // readv/writev
@@ -66,5 +65,3 @@ private:
     HttpRequest request_;
     HttpResponse response_;
 };
-
-#endif //__HTTP_CONNECTION_H_

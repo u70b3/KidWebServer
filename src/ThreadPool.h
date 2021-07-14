@@ -1,5 +1,4 @@
-#ifndef __THREAD_POOL_H_
-#define __THREAD_POOL_H_
+#pragma once
 
 #include <cassert>
 #include <mutex>
@@ -76,5 +75,3 @@ private:
     };
     std::shared_ptr<Pool> pool_;
 };
-
-#endif //__THREAD_POOL_H_

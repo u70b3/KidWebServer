@@ -1,5 +1,4 @@
-#ifndef __LOG_H_
-#define __LOG_H_
+#pragma once
 
 #include <mutex>
 #include <string>
@@ -91,5 +90,3 @@ private:
     {                                      \
         LOG_BASE(3, format, ##__VA_ARGS__) \
     } while (0);
-
-#endif //__LOG_H_
