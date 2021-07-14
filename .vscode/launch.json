@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "ToyWebServer调试",
+            "name": "KidWebServer调试",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/ToyWebServer",
+            "program": "${workspaceFolder}/build/KidWebServer",
             "args": ["65535"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

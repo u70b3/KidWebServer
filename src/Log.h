@@ -1,15 +1,18 @@
 #pragma once
 
+#include "blocking_queue.h"
+#include "buffer.h"
+
+#include <sys/time.h>
+#include <sys/stat.h> //mkdir
+
+#include <cassert>
+#include <cstdarg> // vastart va_end
+#include <cstring>
+
 #include <mutex>
 #include <string>
 #include <thread>
-#include <sys/time.h>
-#include <string.h>
-#include <stdarg.h> // vastart va_end
-#include <assert.h>
-#include <sys/stat.h> //mkdir
-#include "BlockingQueue.h"
-#include "Buffer.h"
 
 class Log
 {

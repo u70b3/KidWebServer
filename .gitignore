@@ -1,6 +1,13 @@
 # project
 *.log
+
+# 排除 .gitkeep
 !.gitkeep
+
+# 可执行文件
+build/
+
+# 临时文件
 pid
 
 

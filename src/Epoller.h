@@ -1,12 +1,13 @@
 #pragma once
 
+#include <sys/epoll.h>
+#include <fcntl.h>
+#include <unistd.h>
 
-#include <sys/epoll.h> //epoll_ctl()
-#include <fcntl.h>     // fcntl()
-#include <unistd.h>    // close()
-#include <assert.h>    // close()
+#include <cassert>
+#include <cerrno>
+
 #include <vector>
-#include <errno.h>
 
 class Epoller
 {

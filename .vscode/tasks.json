@@ -6,7 +6,7 @@
         {
             "label": "Run server",
             "type": "shell",
-            "command": "./build/ToyWebServer 65535",
+            "command": "./build/KidWebServer 65535",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

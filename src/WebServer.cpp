@@ -1,4 +1,4 @@
-#include "WebServer.h"
+#include "webserver.h"
 
 using namespace std;
 
@@ -10,7 +10,9 @@ WebServer::WebServer(
 {
     srcDir_ = getcwd(nullptr, 256);
     assert(srcDir_);
-    strncat(srcDir_, "/root/", 16);
+    // full path: /path/to/project/dir/root/xxx.html
+    strcat(srcDir_, "/root");
+
     HttpConnection::userCount = 0;
     HttpConnection::srcDir = srcDir_;
 
