@@ -200,7 +200,7 @@ void HttpResponse::ErrorContent(Buffer &buff, string message)
     }
     body += to_string(code_) + " : " + status + "\n";
     body += "<p>" + message + "</p>";
-    body += "<hr><em>kid's KidWebServer</em></body></html>";
+    body += "<hr><em>KidWebServer</em></body></html>";
 
     buff.Append("Content-length: " + to_string(body.size()) + "\r\n\r\n");
     buff.Append(body);

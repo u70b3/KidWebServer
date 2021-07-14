@@ -18,7 +18,7 @@ const int EPOLL_SIZE = 16;
 
 int main1(int argc, char *argv[])
 {
-    Log::Instance()->init(0, "./log", ".log", 0);
+    Log::Instance()->Init(0, "./log", ".log", 0);
     LOG_INFO("========== Server start init ==========");
 
     sockaddr_in server_addr, client_addr;
