@@ -7,5 +7,6 @@ FROM mcr.microsoft.com/vscode/devcontainers/cpp:0-${VARIANT}
 # [Optional] Uncomment this section to install additional packages.
 # install mysq-client、vim
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends libmysqlclient-dev vim zsh
+    && apt-get -y install --no-install-recommends libmysqlclient-dev vim zsh curl ab cmake htop
+
 

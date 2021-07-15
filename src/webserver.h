@@ -1,10 +1,11 @@
 #pragma once
 
+#include "config.h"
 #include "epoller.h"
+#include "heap_timer.h"
+#include "http_connection.h"
 #include "log.h"
 #include "thread_pool.h"
-#include "http_connection.h"
-#include "heap_timer.h"
 
 #include <fcntl.h>  // fcntl()
 #include <unistd.h> // close()
@@ -20,10 +21,7 @@
 class WebServer
 {
 public:
-    WebServer(
-        int port, int trigMode, int timeoutMS, bool OptLinger,
-        int threadNum,
-        bool openLog, int logLevel, int logQueSize);
+    WebServer(const Config &conf);
 
     ~WebServer();
     void Start();

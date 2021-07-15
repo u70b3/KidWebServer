@@ -3,10 +3,8 @@
 using namespace std;
 
 WebServer::WebServer(
-    int port, int trigMode, int timeoutMS, bool OptLinger,
-    int threadNum,
-    bool openLog, int logLevel, int logQueSize) : port_(port), openLinger_(OptLinger), timeoutMS_(timeoutMS), isClose_(false),
-                                                  timer_(new HeapTimer()), threadpool_(new ThreadPool(threadNum)), epoller_(new Epoller())
+    const Config &conf) : port_(conf.port), openLinger_(conf.OptLinger), timeoutMS_(conf.timeoutMS), isClose_(false),
+                          timer_(new HeapTimer()), threadpool_(new ThreadPool(conf.threadNum)), epoller_(new Epoller())
 {
     srcDir_ = getcwd(nullptr, 256);
     assert(srcDir_);
@@ -16,15 +14,15 @@ WebServer::WebServer(
     HttpConnection::userCount = 0;
     HttpConnection::srcDir = srcDir_;
 
-    InitEventMode_(trigMode);
+    InitEventMode_(conf.trigMode);
     if (!InitSocket_())
     {
         isClose_ = true;
     }
 
-    if (openLog)
+    if (conf.openLog)
     {
-        Log::Instance()->Init(logLevel, "./log", ".log", logQueSize);
+        Log::Instance()->Init(conf.logLevel, "./log", ".log", conf.logQueSize);
         if (isClose_)
         {
             LOG_ERROR("========== Server init error!==========");
@@ -32,13 +30,13 @@ WebServer::WebServer(
         else
         {
             LOG_INFO("========== Server init ==========");
-            LOG_INFO("Port:%d, OpenLinger: %s", port_, OptLinger ? "true" : "false");
+            LOG_INFO("Port:%d, OpenLinger: %s", port_, conf.OptLinger ? "true" : "false");
             LOG_INFO("Listen Mode: %s, OpenConn Mode: %s",
                      (listenEvent_ & EPOLLET ? "ET" : "LT"),
                      (connEvent_ & EPOLLET ? "ET" : "LT"));
-            LOG_INFO("LogSys level: %d", logLevel);
+            LOG_INFO("LogSys level: %d", conf.logLevel);
             LOG_INFO("srcDir: %s", HttpConnection::srcDir);
-            LOG_INFO("ThreadPool num: %d", threadNum);
+            LOG_INFO("ThreadPool num: %d", conf.threadNum);
         }
     }
 }

@@ -22,7 +22,6 @@ bash stop.sh
 
 ## todo
 - 状态机解析HTTP请求
-- config配置
 - 单元测试
 - 实现循环缓冲区
 - One loop per thread
