@@ -26,12 +26,12 @@ target_link_libraries(
 # test 目录生成测试可执行文件
 add_executable(
     webserver_test
-    ./test/webserver_test.cpp
+    ./test/unit_test/webserver_test.cpp
     )
 
 add_executable(
     thread_pool_test
-    ./test/thread_pool_test.cpp
+    ./test/unit_test/thread_pool_test.cpp
     )
 target_link_libraries(
     thread_pool_test
