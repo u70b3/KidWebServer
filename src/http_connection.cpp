@@ -2,15 +2,15 @@
 
 using namespace std;
 
-const char *HttpConnection::srcDir;
-std::atomic<int> HttpConnection::userCount;
-bool HttpConnection::isET;
+const char *HttpConnection::src_dir;
+std::atomic<int> HttpConnection::user_count;
+bool HttpConnection::is_ET;
 
 HttpConnection::HttpConnection()
 {
     fd_ = -1;
     addr_ = {0};
-    isClose_ = true;
+    is_close_ = true;
 };
 
 HttpConnection::~HttpConnection()
@@ -21,24 +21,24 @@ HttpConnection::~HttpConnection()
 void HttpConnection::Init(int fd, const sockaddr_in &addr)
 {
     assert(fd > 0);
-    userCount++;
+    user_count++;
     addr_ = addr;
     fd_ = fd;
-    writeBuff_.RetrieveAll();
-    readBuff_.RetrieveAll();
-    isClose_ = false;
-    LOG_INFO("Client[%d](%s:%d) in, userCount:%d", fd_, GetIP(), GetPort(), (int)userCount);
+    write_buffer_.RetrieveAll();
+    read_buffer_.RetrieveAll();
+    is_close_ = false;
+    LOG_INFO("Client[%d](%s:%d) in, user_count:%d", fd_, GetIP(), GetPort(), (int)user_count);
 }
 
 void HttpConnection::Close()
 {
     response_.UnmapFile();
-    if (isClose_ == false)
+    if (is_close_ == false)
     {
-        isClose_ = true;
-        userCount--;
+        is_close_ = true;
+        user_count--;
         close(fd_);
-        LOG_INFO("Client[%d](%s:%d) quit, UserCount:%d", fd_, GetIP(), GetPort(), (int)userCount);
+        LOG_INFO("Client[%d](%s:%d) quit, UserCount:%d", fd_, GetIP(), GetPort(), (int)user_count);
     }
 }
 
@@ -62,29 +62,29 @@ int HttpConnection::GetPort() const
     return addr_.sin_port;
 }
 
-ssize_t HttpConnection::read(int *saveErrno)
+ssize_t HttpConnection::read(int *save_errno)
 {
     ssize_t len = -1;
     do
     {
-        len = readBuff_.ReadFd(fd_, saveErrno);
+        len = read_buffer_.ReadFd(fd_, save_errno);
         if (len <= 0)
         {
             break;
         }
-    } while (isET);
+    } while (is_ET);
     return len;
 }
 
-ssize_t HttpConnection::write(int *saveErrno)
+ssize_t HttpConnection::write(int *save_errno)
 {
     ssize_t len = -1;
     do
     {
-        len = writev(fd_, iov_, iovCnt_);
+        len = writev(fd_, iov_, iov_cnt_);
         if (len <= 0)
         {
-            *saveErrno = errno;
+            *save_errno = errno;
             break;
         }
         if (iov_[0].iov_len + iov_[1].iov_len == 0)
@@ -97,7 +97,7 @@ ssize_t HttpConnection::write(int *saveErrno)
             iov_[1].iov_len -= (len - iov_[0].iov_len);
             if (iov_[0].iov_len)
             {
-                writeBuff_.RetrieveAll();
+                write_buffer_.RetrieveAll();
                 iov_[0].iov_len = 0;
             }
         }
@@ -105,42 +105,42 @@ ssize_t HttpConnection::write(int *saveErrno)
         {
             iov_[0].iov_base = (uint8_t *)iov_[0].iov_base + len;
             iov_[0].iov_len -= len;
-            writeBuff_.Retrieve(len);
+            write_buffer_.Retrieve(len);
         }
-    } while (isET || ToWriteBytes() > 10240);
+    } while (is_ET || ToWriteBytes() > 10240);
     return len;
 }
 
 bool HttpConnection::process()
 {
     request_.Init();
-    if (readBuff_.ReadableBytes() <= 0)
+    if (read_buffer_.ReadableBytes() <= 0)
     {
         return false;
     }
-    else if (request_.parse(readBuff_))
+    else if (request_.parse(read_buffer_))
     {
         LOG_DEBUG("%s", request_.path().c_str());
-        response_.Init(srcDir, request_.path(), request_.IsKeepAlive(), 200);
+        response_.Init(src_dir, request_.path(), request_.IsKeepAlive(), 200);
     }
     else
     {
-        response_.Init(srcDir, request_.path(), false, 400);
+        response_.Init(src_dir, request_.path(), false, 400);
     }
 
-    response_.MakeResponse(writeBuff_);
+    response_.MakeResponse(write_buffer_);
     /* 响应头 */
-    iov_[0].iov_base = const_cast<char *>(writeBuff_.Peek());
-    iov_[0].iov_len = writeBuff_.ReadableBytes();
-    iovCnt_ = 1;
+    iov_[0].iov_base = const_cast<char *>(write_buffer_.Peek());
+    iov_[0].iov_len = write_buffer_.ReadableBytes();
+    iov_cnt_ = 1;
 
     /* 文件 */
     if (response_.FileLen() > 0 && response_.File())
     {
         iov_[1].iov_base = response_.File();
         iov_[1].iov_len = response_.FileLen();
-        iovCnt_ = 2;
+        iov_cnt_ = 2;
     }
-    LOG_DEBUG("filesize:%d, %d  to %d", response_.FileLen(), iovCnt_, ToWriteBytes());
+    LOG_DEBUG("filesize:%d, %d  to %d", response_.FileLen(), iov_cnt_, ToWriteBytes());
     return true;
 }

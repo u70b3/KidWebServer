@@ -11,10 +11,10 @@ void Print(int i, int cnt)
 
 int main()
 {
-    auto threedPool = new ThreadPool();
+    auto threed_pool = new ThreadPool();
     for (size_t i = 0; i < 31; i++)
     {
-        threedPool->AddTask(std::bind(Print, i, i * 100));
+        threed_pool->AddTask(std::bind(Print, i, i * 100));
     }
     return 0;
 }

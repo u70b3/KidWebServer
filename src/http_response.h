@@ -16,7 +16,7 @@ public:
     HttpResponse();
     ~HttpResponse();
 
-    void Init(const std::string &srcDir, std::string &path, bool isKeepAlive = false, int code = -1);
+    void Init(const std::string &src_dir, std::string &path, bool is_keep_alive = false, int code = -1);
     void MakeResponse(Buffer &buff);
     void UnmapFile();
     char *File();
@@ -33,13 +33,13 @@ private:
     std::string GetFileType_();
 
     int code_;
-    bool isKeepAlive_;
+    bool is_keep_alive_;
 
     std::string path_;
-    std::string srcDir_;
+    std::string src_dir_;
 
-    char *mmFile_;
-    struct stat mmFileStat_;
+    char *mm_file_;
+    struct stat mm_file_stat_;
 
     static const std::unordered_map<std::string, std::string> SUFFIX_TYPE;
     static const std::unordered_map<int, std::string> CODE_STATUS;

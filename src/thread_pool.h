@@ -10,10 +10,10 @@
 class ThreadPool
 {
 public:
-    explicit ThreadPool(size_t threadCount) : pool_(std::make_shared<Pool>())
+    explicit ThreadPool(size_t thread_num) : pool_(std::make_shared<Pool>())
     {
-        assert(threadCount > 0);
-        for (size_t i = 0; i < threadCount; i++)
+        assert(thread_num > 0);
+        for (size_t i = 0; i < thread_num; i++)
         {
             std::thread([pool = pool_]
                         {
@@ -28,10 +28,10 @@ public:
                                     task();
                                     locker.lock();
                                 }
-                                else if (pool->isClosed)
+                                else if (pool->is_closed)
                                     break;
                                 else
-                                    pool->cond.wait(locker);
+                                    pool->cv.wait(locker);
                             }
                         })
                 .detach();
@@ -51,9 +51,9 @@ public:
         {
             {
                 std::lock_guard<std::mutex> locker(pool_->mtx);
-                pool_->isClosed = true;
+                pool_->is_closed = true;
             }
-            pool_->cond.notify_all();
+            pool_->cv.notify_all();
         }
     }
 
@@ -64,15 +64,15 @@ public:
             std::lock_guard<std::mutex> locker(pool_->mtx);
             pool_->tasks.emplace(std::forward<F>(task));
         }
-        pool_->cond.notify_one();
+        pool_->cv.notify_one();
     }
 
 private:
     struct Pool
     {
         std::mutex mtx;
-        std::condition_variable cond;
-        bool isClosed;
+        std::condition_variable cv;
+        bool is_closed;
         std::queue<std::function<void()>> tasks;
     };
     std::shared_ptr<Pool> pool_;

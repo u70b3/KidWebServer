@@ -12,7 +12,7 @@ template <class T>
 class BlockingQueue
 {
 public:
-    explicit BlockingQueue(size_t MaxCapacity = 1000);
+    explicit BlockingQueue(size_t max_capacity = 1000);
 
     ~BlockingQueue();
 
@@ -49,18 +49,18 @@ private:
 
     std::mutex mtx_;
 
-    bool isClose_;
+    bool is_close_;
 
-    std::condition_variable condConsumer_;
+    std::condition_variable cv_consumer_;
 
-    std::condition_variable condProducer_;
+    std::condition_variable cv_producer_;
 };
 
 template <class T>
-BlockingQueue<T>::BlockingQueue(size_t MaxCapacity) : capacity_(MaxCapacity)
+BlockingQueue<T>::BlockingQueue(size_t max_capacity) : capacity_(max_capacity)
 {
-    assert(MaxCapacity > 0);
-    isClose_ = false;
+    assert(max_capacity > 0);
+    is_close_ = false;
 }
 
 template <class T>
@@ -75,16 +75,16 @@ void BlockingQueue<T>::Close()
     {
         std::lock_guard<std::mutex> locker(mtx_);
         deq_.clear();
-        isClose_ = true;
+        is_close_ = true;
     }
-    condProducer_.notify_all();
-    condConsumer_.notify_all();
+    cv_producer_.notify_all();
+    cv_consumer_.notify_all();
 };
 
 template <class T>
 void BlockingQueue<T>::flush()
 {
-    condConsumer_.notify_one();
+    cv_consumer_.notify_one();
 };
 
 template <class T>
@@ -128,10 +128,10 @@ void BlockingQueue<T>::push_back(const T &item)
     std::unique_lock<std::mutex> locker(mtx_);
     while (deq_.size() >= capacity_)
     {
-        condProducer_.wait(locker);
+        cv_producer_.wait(locker);
     }
     deq_.push_back(item);
-    condConsumer_.notify_one();
+    cv_consumer_.notify_one();
 }
 
 template <class T>
@@ -140,10 +140,10 @@ void BlockingQueue<T>::push_front(const T &item)
     std::unique_lock<std::mutex> locker(mtx_);
     while (deq_.size() >= capacity_)
     {
-        condProducer_.wait(locker);
+        cv_producer_.wait(locker);
     }
     deq_.push_front(item);
-    condConsumer_.notify_one();
+    cv_consumer_.notify_one();
 }
 
 template <class T>
@@ -166,15 +166,15 @@ bool BlockingQueue<T>::pop(T &item)
     std::unique_lock<std::mutex> locker(mtx_);
     while (deq_.empty())
     {
-        condConsumer_.wait(locker);
-        if (isClose_)
+        cv_consumer_.wait(locker);
+        if (is_close_)
         {
             return false;
         }
     }
     item = deq_.front();
     deq_.pop_front();
-    condProducer_.notify_one();
+    cv_producer_.notify_one();
     return true;
 }
 
@@ -184,17 +184,17 @@ bool BlockingQueue<T>::pop(T &item, int timeout)
     std::unique_lock<std::mutex> locker(mtx_);
     while (deq_.empty())
     {
-        if (condConsumer_.wait_for(locker, std::chrono::seconds(timeout)) == std::cv_status::timeout)
+        if (cv_consumer_.wait_for(locker, std::chrono::seconds(timeout)) == std::cv_status::timeout)
         {
             return false;
         }
-        if (isClose_)
+        if (is_close_)
         {
             return false;
         }
     }
     item = deq_.front();
     deq_.pop_front();
-    condProducer_.notify_one();
+    cv_producer_.notify_one();
     return true;
 }

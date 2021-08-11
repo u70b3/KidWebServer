@@ -1,6 +1,4 @@
 #pragma once
 
-
-void setnonblockingmode(int fd);
-void error_handling(const char *buf);
-
+void SetNonBlockingMode(int fd);
+void ErrorHandler(const char *buf);

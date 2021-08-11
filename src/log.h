@@ -19,7 +19,7 @@ class Log
 public:
     void Init(int level, const char *path = "./log",
               const char *suffix = ".log",
-              int maxQueueCapacity = 1024);
+              int max_queue_capacity = 1024);
 
     static Log *Instance();
     static void FlushLogThread();
@@ -29,7 +29,7 @@ public:
 
     int GetLevel();
     void SetLevel(int level);
-    bool IsOpen() { return isOpen_; }
+    bool IsOpen() { return is_open_; }
 
 private:
     Log();
@@ -47,18 +47,18 @@ private:
 
     int MAX_LINES_;
 
-    int lineCount_;
-    int toDay_;
+    int line_count_;
+    int to_day_;
 
-    bool isOpen_;
+    bool is_open_;
 
     Buffer buff_;
     int level_;
-    bool isAsync_;
+    bool is_async_;
 
     FILE *fp_;
     std::unique_ptr<BlockingQueue<std::string>> deque_;
-    std::unique_ptr<std::thread> writeThread_;
+    std::unique_ptr<std::thread> write_thread_;
     std::mutex mtx_;
 };
 

@@ -4,24 +4,24 @@ using namespace std;
 
 Log::Log()
 {
-    lineCount_ = 0;
-    isAsync_ = false;
-    writeThread_ = nullptr;
+    line_count_ = 0;
+    is_async_ = false;
+    write_thread_ = nullptr;
     deque_ = nullptr;
-    toDay_ = 0;
+    to_day_ = 0;
     fp_ = nullptr;
 }
 
 Log::~Log()
 {
-    if (writeThread_ && writeThread_->joinable())
+    if (write_thread_ && write_thread_->joinable())
     {
         while (!deque_->empty())
         {
             deque_->flush();
         };
         deque_->Close();
-        writeThread_->join();
+        write_thread_->join();
     }
     if (fp_)
     {
@@ -44,28 +44,28 @@ void Log::SetLevel(int level)
 }
 
 void Log::Init(int level = 1, const char *path, const char *suffix,
-               int maxQueueSize)
+               int max_queue_capacity)
 {
-    isOpen_ = true;
+    is_open_ = true;
     level_ = level;
-    if (maxQueueSize > 0)
+    if (max_queue_capacity > 0)
     {
-        isAsync_ = true;
+        is_async_ = true;
         if (!deque_)
         {
             unique_ptr<BlockingQueue<std::string>> newDeque(new BlockingQueue<std::string>);
             deque_ = move(newDeque);
 
             std::unique_ptr<std::thread> NewThread(new thread(FlushLogThread));
-            writeThread_ = move(NewThread);
+            write_thread_ = move(NewThread);
         }
     }
     else
     {
-        isAsync_ = false;
+        is_async_ = false;
     }
 
-    lineCount_ = 0;
+    line_count_ = 0;
 
     time_t timer = time(nullptr);
     struct tm *sysTime = localtime(&timer);
@@ -75,7 +75,7 @@ void Log::Init(int level = 1, const char *path, const char *suffix,
     char fileName[LOG_NAME_LEN] = {0};
     snprintf(fileName, LOG_NAME_LEN - 1, "%s/%04d_%02d_%02d%s",
              path_, t.tm_year + 1900, t.tm_mon + 1, t.tm_mday, suffix_);
-    toDay_ = t.tm_mday;
+    to_day_ = t.tm_mday;
 
     {
         lock_guard<mutex> locker(mtx_);
@@ -106,7 +106,7 @@ void Log::write(int level, const char *format, ...)
     va_list vaList;
 
     /* 日志日期 日志行数 */
-    if (toDay_ != t.tm_mday || (lineCount_ && (lineCount_ % MAX_LINES == 0)))
+    if (to_day_ != t.tm_mday || (line_count_ && (line_count_ % MAX_LINES == 0)))
     {
         unique_lock<mutex> locker(mtx_);
         locker.unlock();
@@ -115,15 +115,15 @@ void Log::write(int level, const char *format, ...)
         char tail[36] = {0};
         snprintf(tail, 36, "%04d_%02d_%02d", t.tm_year + 1900, t.tm_mon + 1, t.tm_mday);
 
-        if (toDay_ != t.tm_mday)
+        if (to_day_ != t.tm_mday)
         {
             snprintf(newFile, LOG_NAME_LEN - 72, "%s/%s%s", path_, tail, suffix_);
-            toDay_ = t.tm_mday;
-            lineCount_ = 0;
+            to_day_ = t.tm_mday;
+            line_count_ = 0;
         }
         else
         {
-            snprintf(newFile, LOG_NAME_LEN - 72, "%s/%s-%d%s", path_, tail, (lineCount_ / MAX_LINES), suffix_);
+            snprintf(newFile, LOG_NAME_LEN - 72, "%s/%s-%d%s", path_, tail, (line_count_ / MAX_LINES), suffix_);
         }
 
         locker.lock();
@@ -135,7 +135,7 @@ void Log::write(int level, const char *format, ...)
 
     {
         unique_lock<mutex> locker(mtx_);
-        lineCount_++;
+        line_count_++;
         int n = snprintf(buff_.BeginWrite(), 128, "%d-%02d-%02d %02d:%02d:%02d.%06ld ",
                          t.tm_year + 1900, t.tm_mon + 1, t.tm_mday,
                          t.tm_hour, t.tm_min, t.tm_sec, now.tv_usec);
@@ -150,7 +150,7 @@ void Log::write(int level, const char *format, ...)
         buff_.HasWritten(m);
         buff_.Append("\n\0", 2);
 
-        if (isAsync_ && deque_ && !deque_->full())
+        if (is_async_ && deque_ && !deque_->full())
         {
             deque_->push_back(buff_.RetrieveAllToStr());
         }
@@ -186,7 +186,7 @@ void Log::AppendLogLevelTitle_(int level)
 
 void Log::flush()
 {
-    if (isAsync_)
+    if (is_async_)
     {
         deque_->flush();
     }

@@ -69,7 +69,7 @@ void HeapTimer::add(int id, int timeout, const TimeoutCallBack &cb)
     }
 }
 
-void HeapTimer::doWork(int id)
+void HeapTimer::DoWork(int id)
 {
     /* 删除指定id结点，并触发回调函数 */
     if (heap_.empty() || ref_.count(id) == 0)
@@ -103,11 +103,11 @@ void HeapTimer::del_(size_t index)
     heap_.pop_back();
 }
 
-void HeapTimer::adjust(int id, int timeout)
+void HeapTimer::adjust(int id, int new_expires)
 {
     /* 调整指定id的结点 */
     assert(!heap_.empty() && ref_.count(id) > 0);
-    heap_[ref_[id]].expires = Clock::now() + MS(timeout);
+    heap_[ref_[id]].expires = Clock::now() + MS(new_expires);
     ;
     siftdown_(ref_[id], heap_.size());
 }

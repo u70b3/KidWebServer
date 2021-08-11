@@ -8,7 +8,7 @@
 
 const int BUF_SIZE = 1024;
 
-void error_handling(const char *message)
+void ErrorHandler(const char *message)
 {
     printf("%s", message);
     exit(1);
@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
     sock = socket(PF_INET, SOCK_STREAM, 0);
     if (sock == -1)
     {
-        error_handling("socket() error");
+        ErrorHandler("socket() error");
     }
 
     // 地址信息初始化
@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     // 向服务器发送连接请求
     if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1)
     {
-        error_handling("connect() error");
+        ErrorHandler("connect() error");
     }
     else
     {
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
             recv_cnt = read(sock, message, BUF_SIZE); // 读取来自客户端的服务器
             if (recv_cnt == -1)
             {
-                error_handling("read() error");
+                ErrorHandler("read() error");
             }
             recv_len += recv_cnt;
         }

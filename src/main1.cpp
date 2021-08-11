@@ -38,13 +38,13 @@ int main1(int argc, char *argv[])
 
     if (bind(server_sock, (sockaddr *)&server_addr, sizeof(server_addr)) == -1)
     {
-        error_handling("bind() error");
+        ErrorHandler("bind() error");
         exit(1);
     }
 
     if (listen(server_sock, 5) == -1)
     {
-        error_handling("listen() error");
+        ErrorHandler("listen() error");
     }
 
     LOG_INFO("========== Server listening on %d ==========", server_addr.sin_port);
@@ -69,7 +69,7 @@ int main1(int argc, char *argv[])
             {
                 socklen_t addr_size = sizeof(client_addr);
                 int client_sock = accept(server_sock, (sockaddr *)&client_addr, &addr_size);
-                setnonblockingmode(client_sock); // 设置client socket为非阻塞模式
+                SetNonBlockingMode(client_sock); // 设置client socket为非阻塞模式
                 epoller->AddFd(client_sock, EPOLLIN | EPOLLET);
                 LOG_INFO("connect client: %d\n", client_sock);
             }

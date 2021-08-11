@@ -12,7 +12,7 @@
 class Epoller
 {
 public:
-    explicit Epoller(int maxEvent = 1024);
+    explicit Epoller(int max_event = 1024);
 
     ~Epoller();
 
@@ -22,14 +22,14 @@ public:
 
     bool DeleteFd(int fd);
 
-    int Wait(int timeoutMs = -1);
+    int Wait(int timeout_ms = -1);
 
     int GetEventFd(size_t i) const;
 
     uint32_t GetEvents(size_t i) const;
 
 private:
-    int epollFd_;
+    int epoll_fd_;
 
     std::vector<struct epoll_event> events_;
 };

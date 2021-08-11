@@ -40,10 +40,10 @@ const unordered_map<int, string> HttpResponse::CODE_PATH = {
 HttpResponse::HttpResponse()
 {
     code_ = -1;
-    path_ = srcDir_ = "";
-    isKeepAlive_ = false;
-    mmFile_ = nullptr;
-    mmFileStat_ = {0};
+    path_ = src_dir_ = "";
+    is_keep_alive_ = false;
+    mm_file_ = nullptr;
+    mm_file_stat_ = {0};
 };
 
 HttpResponse::~HttpResponse()
@@ -51,29 +51,29 @@ HttpResponse::~HttpResponse()
     UnmapFile();
 }
 
-void HttpResponse::Init(const string &srcDir, string &path, bool isKeepAlive, int code)
+void HttpResponse::Init(const string &src_dir, string &path, bool is_keep_alive, int code)
 {
-    assert(srcDir != "");
-    if (mmFile_)
+    assert(src_dir != "");
+    if (mm_file_)
     {
         UnmapFile();
     }
     code_ = code;
-    isKeepAlive_ = isKeepAlive;
+    is_keep_alive_ = is_keep_alive;
     path_ = path;
-    srcDir_ = srcDir;
-    mmFile_ = nullptr;
-    mmFileStat_ = {0};
+    src_dir_ = src_dir;
+    mm_file_ = nullptr;
+    mm_file_stat_ = {0};
 }
 
 void HttpResponse::MakeResponse(Buffer &buff)
 {
     /* 判断请求的资源文件 */
-    if (stat((srcDir_ + path_).c_str(), &mmFileStat_) < 0 || S_ISDIR(mmFileStat_.st_mode))
+    if (stat((src_dir_ + path_).c_str(), &mm_file_stat_) < 0 || S_ISDIR(mm_file_stat_.st_mode))
     {
         code_ = 404;
     }
-    else if (!(mmFileStat_.st_mode & S_IROTH))
+    else if (!(mm_file_stat_.st_mode & S_IROTH))
     {
         code_ = 403;
     }
@@ -89,12 +89,12 @@ void HttpResponse::MakeResponse(Buffer &buff)
 
 char *HttpResponse::File()
 {
-    return mmFile_;
+    return mm_file_;
 }
 
 size_t HttpResponse::FileLen() const
 {
-    return mmFileStat_.st_size;
+    return mm_file_stat_.st_size;
 }
 
 void HttpResponse::ErrorHtml_()
@@ -102,7 +102,7 @@ void HttpResponse::ErrorHtml_()
     if (CODE_PATH.count(code_) == 1)
     {
         path_ = CODE_PATH.find(code_)->second;
-        stat((srcDir_ + path_).c_str(), &mmFileStat_);
+        stat((src_dir_ + path_).c_str(), &mm_file_stat_);
     }
 }
 
@@ -124,7 +124,7 @@ void HttpResponse::AddStateLine_(Buffer &buff)
 void HttpResponse::AddHeader_(Buffer &buff)
 {
     buff.Append("Connection: ");
-    if (isKeepAlive_)
+    if (is_keep_alive_)
     {
         buff.Append("keep-alive\r\n");
         buff.Append("keep-alive: max=6, timeout=120\r\n");
@@ -138,7 +138,7 @@ void HttpResponse::AddHeader_(Buffer &buff)
 
 void HttpResponse::AddContent_(Buffer &buff)
 {
-    int srcFd = open((srcDir_ + path_).c_str(), O_RDONLY);
+    int srcFd = open((src_dir_ + path_).c_str(), O_RDONLY);
     if (srcFd < 0)
     {
         ErrorContent(buff, "File NotFound!");
@@ -147,24 +147,24 @@ void HttpResponse::AddContent_(Buffer &buff)
 
     /* 将文件映射到内存提高文件的访问速度 
         MAP_PRIVATE 建立一个写入时拷贝的私有映射*/
-    LOG_DEBUG("file path %s", (srcDir_ + path_).c_str());
-    int *mmRet = (int *)mmap(0, mmFileStat_.st_size, PROT_READ, MAP_PRIVATE, srcFd, 0);
-    if (*mmRet == -1)
+    LOG_DEBUG("file path %s", (src_dir_ + path_).c_str());
+    int *mm_ret = (int *)mmap(0, mm_file_stat_.st_size, PROT_READ, MAP_PRIVATE, srcFd, 0);
+    if (*mm_ret == -1)
     {
         ErrorContent(buff, "File NotFound!");
         return;
     }
-    mmFile_ = (char *)mmRet;
+    mm_file_ = (char *)mm_ret;
     close(srcFd);
-    buff.Append("Content-length: " + to_string(mmFileStat_.st_size) + "\r\n\r\n");
+    buff.Append("Content-length: " + to_string(mm_file_stat_.st_size) + "\r\n\r\n");
 }
 
 void HttpResponse::UnmapFile()
 {
-    if (mmFile_)
+    if (mm_file_)
     {
-        munmap(mmFile_, mmFileStat_.st_size);
-        mmFile_ = nullptr;
+        munmap(mm_file_, mm_file_stat_.st_size);
+        mm_file_ = nullptr;
     }
 }
 

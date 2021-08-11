@@ -28,7 +28,7 @@ public:
 
 private:
     bool InitSocket_();
-    void InitEventMode_(int trigMode);
+    void InitEventMode_(int trig_mode);
     void AddClient_(int fd, sockaddr_in addr);
 
     void DealListen_();
@@ -48,14 +48,14 @@ private:
     static int SetFdNonBlock(int fd);
 
     int port_;
-    bool openLinger_;
-    int timeoutMS_; /* 毫秒MS */
-    bool isClose_;
-    int listenFd_;
-    char *srcDir_;
+    bool open_linger_;
+    int timeout_ms_; /* 毫秒MS */
+    bool is_close_;
+    int listen_fd_;
+    char *src_dir_;
 
-    uint32_t listenEvent_;
-    uint32_t connEvent_;
+    uint32_t listen_event_;
+    uint32_t conn_event_;
 
     std::unique_ptr<HeapTimer> timer_;
     std::unique_ptr<ThreadPool> threadpool_;

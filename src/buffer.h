@@ -6,7 +6,6 @@
 #include <cstring>
 #include <cassert>
 
-
 #include <iostream>
 #include <vector>
 #include <atomic>
@@ -39,8 +38,8 @@ public:
     void Append(const void *data, size_t len);
     void Append(const Buffer &buff);
 
-    ssize_t ReadFd(int fd, int *Errno);
-    ssize_t WriteFd(int fd, int *Errno);
+    ssize_t ReadFd(int fd, int *save_errno);
+    ssize_t WriteFd(int fd, int *save_errno);
 
 private:
     char *BeginPtr_();
@@ -48,6 +47,6 @@ private:
     void MakeSpace_(size_t len);
 
     std::vector<char> buffer_;
-    std::atomic<std::size_t> readPos_;
-    std::atomic<std::size_t> writePos_;
+    std::atomic<std::size_t> read_pos_;
+    std::atomic<std::size_t> write_pos_;
 };

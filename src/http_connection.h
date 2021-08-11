@@ -20,11 +20,11 @@ public:
 
     ~HttpConnection();
 
-    void Init(int sockFd, const sockaddr_in &addr);
+    void Init(int fd, const sockaddr_in &addr);
 
-    ssize_t read(int *saveErrno);
+    ssize_t read(int *save_errno);
 
-    ssize_t write(int *saveErrno);
+    ssize_t write(int *save_errno);
 
     void Close();
 
@@ -48,21 +48,21 @@ public:
         return request_.IsKeepAlive();
     }
 
-    static bool isET;
-    static const char *srcDir;
-    static std::atomic<int> userCount;
+    static bool is_ET;
+    static const char *src_dir;
+    static std::atomic<int> user_count;
 
 private:
     int fd_;
     struct sockaddr_in addr_;
 
-    bool isClose_;
+    bool is_close_;
 
-    int iovCnt_;
+    int iov_cnt_;
     struct iovec iov_[2];
 
-    Buffer readBuff_;  // 读缓冲区
-    Buffer writeBuff_; // 写缓冲区
+    Buffer read_buffer_;  // 读缓冲区
+    Buffer write_buffer_; // 写缓冲区
 
     HttpRequest request_;
     HttpResponse response_;

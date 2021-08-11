@@ -7,7 +7,6 @@
 #include <cassert>
 #include <ctime>
 
-
 #include <queue>
 #include <unordered_map>
 #include <algorithm>
@@ -36,11 +35,11 @@ public:
 
     ~HeapTimer() { clear(); }
 
-    void adjust(int id, int newExpires);
+    void adjust(int id, int new_expires);
 
-    void add(int id, int timeOut, const TimeoutCallBack &cb);
+    void add(int id, int timeout, const TimeoutCallBack &cb);
 
-    void doWork(int id);
+    void DoWork(int id);
 
     void clear();
 

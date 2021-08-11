@@ -6,11 +6,11 @@ class Config
 {
 public:
     int port;
-    int trigMode;
-    int timeoutMS;
-    bool OptLinger;
-    int threadNum;
-    bool openLog;
-    int logLevel;
-    int logQueSize;
+    int trig_mode;
+    int timeout_ms;
+    bool opt_linger;
+    int thread_num;
+    bool open_log;
+    int log_level;
+    int log_queue_size;
 };
